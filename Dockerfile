@@ -1,8 +1,13 @@
-# Utilizando a imagem do scratch como base
+FROM golang:1.17.5-alpine as builder
+
+WORKDIR /go
+
+COPY main.go .
+
+RUN go build main.go
+
 FROM scratch
 
-# Copiando o binário compilado para a imagem
-COPY hello-go /hello-go
+COPY --from=builder /go/main .
 
-# Definindo o comando que será executado ao rodar o container
-CMD ["/hello-go"]
+CMD ["./main"]
